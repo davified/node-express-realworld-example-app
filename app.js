@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-var fs = require("fs"),
+const fs = require("fs"),
   http = require("http"),
   path = require("path"),
   methods = require("methods"),
@@ -12,10 +12,10 @@ var fs = require("fs"),
   errorhandler = require("errorhandler"),
   mongoose = require("mongoose");
 
-var isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "production";
 
 // Create global app object
-var app = express();
+const app = express();
 
 app.use(cors());
 
@@ -51,7 +51,7 @@ app.use(require("./routes"));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error("Not Found");
+  let err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
