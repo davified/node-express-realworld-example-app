@@ -13,7 +13,7 @@ let mongoServer;
 const setup = async () => {
   mongoServer = new MongodbMemoryServer();
   const mongoUri = await mongoServer.getConnectionString();
-  const opts = { useMongoClient: true };
+  const opts = {};
   await mongoose
     .connect(mongoUri, opts)
     .then(
