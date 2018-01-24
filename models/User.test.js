@@ -80,3 +80,35 @@ describe("Unique fields in User model", () => {
     await expect(uniqueUser.save()).resolves.toBe(uniqueUser);
   });
 });
+
+describe("Some fields in User model are case insensitive", () => {
+  const username1 = "joe";
+  const email1 = "joe@example.com";
+
+  const username2 = "jack";
+  const email2 = "jack@example.com";
+
+  let user1 = new User({ username: username1, email: email1 });
+
+  beforeEach(async () => await user1.save());
+
+  test("username is case insensitive", async () => {
+    let userWithSameNameButDifferentCase = new User({
+      username: username1.toUpperCase(),
+      email: email2
+    });
+    await expect(userWithSameNameButDifferentCase.save()).rejects.toThrow(
+      ValidationError
+    );
+  });
+
+  test("email is case insensitive", async () => {
+    let userWithSameEmailButDifferentCase = new User({
+      username: username2,
+      email: email1.toUpperCase()
+    });
+    await expect(userWithSameEmailButDifferentCase.save()).rejects.toThrow(
+      ValidationError
+    );
+  });
+});
