@@ -196,3 +196,24 @@ describe("JWT tokens", () => {
     expect(user.verifyJWT("invalid token")).toBeFalsy();
   });
 });
+
+describe("Generate user profile as JSON", () => {
+  const username = "luke";
+  const email = "luke@example.com";
+  const bio = "user bio";
+  const image = "image location";
+
+  let user = new User({ username, email, bio, image });
+
+  beforeEach(async () => {
+    await user.save();
+  });
+  it("should return user profile as JSON (after user login)", () => {
+    const userProfile = user.toAuthJSON();
+    expect(userProfile.username).toEqual(username);
+    expect(userProfile.email).toEqual(email);
+    expect(userProfile.bio).toEqual(bio);
+    expect(userProfile.image).toEqual(image);
+    expect(userProfile.token).toEqual(user.generateJWT());
+  });
+});

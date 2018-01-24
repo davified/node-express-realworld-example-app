@@ -62,6 +62,16 @@ UserSchema.methods.verifyJWT = function(token) {
   }
 };
 
+UserSchema.methods.toAuthJSON = function() {
+  return {
+    username: this.username,
+    email: this.email,
+    token: this.generateJWT(),
+    bio: this.bio,
+    image: this.image
+  };
+};
+
 function generateSalt() {
   return crypto.randomBytes(16).toString("hex");
 }
