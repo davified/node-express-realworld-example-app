@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -26,4 +27,22 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.methods.setPassword = function(password) {
+  this.salt = generateSalt();
+  this.hash = hashPassword(password, this.salt);
+};
+
+UserSchema.methods.validPassword = function(password) {
+  return this.hash === hashPassword(password, this.salt);
+};
+
+function generateSalt() {
+  return crypto.randomBytes(16).toString("hex");
+}
+
+function hashPassword(password, salt) {
+  return crypto
+    .pbkdf2Sync(password, salt, 10000, 512, "sha512")
+    .toString("hex");
+}
 module.exports = mongoose.model("User", UserSchema);

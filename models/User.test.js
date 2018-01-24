@@ -149,3 +149,31 @@ describe("Some of the fields in User Model have required format", () => {
     await expect(userWithInvalidEmail.save()).rejects.toThrow(ValidationError);
   });
 });
+
+describe("Setting and validation of password field on User model", () => {
+  const username = "kate";
+  const email = "kate@example.com";
+  const password = "mypassword";
+
+  let user = new User({ username, email });
+
+  beforeEach(async () => {
+    await user.save();
+  });
+
+  it("should save user passwords into hash and salt fields of User model", async () => {
+    expect(user.salt).toBeUndefined();
+    expect(user.hash).toBeUndefined();
+
+    user.setPassword(password);
+
+    expect(user.salt).toBeDefined();
+    expect(user.salt).not.toBeNull();
+    expect(user.hash).toBeDefined();
+    expect(user.hash).not.toBeNull();
+  });
+
+  it("should be able to verify user password afterwards", () => {
+    expect(user.validPassword(password)).toBeTruthy();
+  });
+});
