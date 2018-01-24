@@ -113,7 +113,7 @@ describe("Some fields in User model are case insensitive", () => {
   });
 });
 
-describe("Some of the fields in Usser model are required", () => {
+describe("Some of the fields in User model are required", () => {
   const username1 = "peter";
   const email1 = "peter@example.com";
 
@@ -129,5 +129,23 @@ describe("Some of the fields in Usser model are required", () => {
       username: username1
     });
     await expect(userWithoutEmail.save()).rejects.toThrow(ValidationError);
+  });
+});
+
+describe("Some of the fields in User Model have required format", () => {
+  test("username can only contain alphanumeric alphabets", async () => {
+    let userWithInvalidName = new User({
+      username: "Tom_Peter", // _ is not allowed here
+      email: "myemail@example.com"
+    });
+    await expect(userWithInvalidName.save()).rejects.toThrow(ValidationError);
+  });
+
+  test("email should follow the normal email format", async () => {
+    let userWithInvalidEmail = new User({
+      username: "jessie",
+      email: "myemailexample.com" // missing @
+    });
+    await expect(userWithInvalidEmail.save()).rejects.toThrow(ValidationError);
   });
 });
