@@ -112,3 +112,22 @@ describe("Some fields in User model are case insensitive", () => {
     );
   });
 });
+
+describe("Some of the fields in Usser model are required", () => {
+  const username1 = "peter";
+  const email1 = "peter@example.com";
+
+  test("username is required", async () => {
+    let userWithoutName = new User({
+      email: email1
+    });
+    await expect(userWithoutName.save()).rejects.toThrow(ValidationError);
+  });
+
+  test("email is required", async () => {
+    let userWithoutEmail = new User({
+      username: username1
+    });
+    await expect(userWithoutEmail.save()).rejects.toThrow(ValidationError);
+  });
+});
