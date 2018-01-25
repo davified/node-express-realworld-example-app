@@ -1,4 +1,4 @@
-const test_mongodb = require("./in_memory_mongodb_setup");
+const test_mongodb = require("../test_helper/in_memory_mongodb_setup");
 const ValidationError = require("mongoose").ValidationError;
 
 beforeAll(test_mongodb.setup);
