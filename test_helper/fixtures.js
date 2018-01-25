@@ -3,11 +3,24 @@ const User = require("../models/User");
 
 const fixtures = {};
 
-async function loadFixtures() {
-  const tom = await loadFixture(User, {
-    username: "tom",
-    email: "tom@example.com"
+function getNewUser(username, email, password) {
+  const user = new User({
+    username,
+    email
   });
+  user.setPassword(password);
+  // store the plaintext password for the test cases to simulate login
+  // this is not stored in database
+  user.password = password;
+  return user;
+}
+
+async function loadFixtures() {
+  const password = "mypassword";
+  const tom = await loadFixture(
+    User,
+    getNewUser("tom", "tom@example.com", password)
+  );
 
   fixtures.users = { tom };
 }
