@@ -38,8 +38,11 @@ if (!isProduction) {
 if (isProduction) {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect("mongodb://localhost/conduit");
-  mongoose.set("debug", true);
+  const isMongooseConnectionProvided = process.env.NODE_ENV === "integration";
+  if (!isMongooseConnectionProvided) {
+    mongoose.connect("mongodb://localhost/conduit");
+    mongoose.set("debug", true);
+  }
 }
 
 require("./models/User");
