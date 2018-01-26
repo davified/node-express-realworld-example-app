@@ -36,17 +36,35 @@ function login(req, res, next) {
 }
 
 async function getCurrentUser(req, res) {
-  if (!req.jwt) {
-    return res.status(401);
-  }
   const userId = req.jwt.userid;
   const user = await User.findById(userId);
 
   return res.status(200).json({ user: user.toAuthJSON() });
 }
 
+async function updateCurrentUser(req, res) {
+  const userId = req.jwt.userid;
+  const user = await User.findById(userId);
+
+  const newUserProfile = req.body.user;
+  if (!newUserProfile) {
+    return res.status(422).json({
+      errors: { "user profile": "User profile information is not given." }
+    });
+  }
+  ["email", "password", "username", "image", "bio"].forEach(detail => {
+    if (newUserProfile[detail]) {
+      user[detail] = newUserProfile[detail];
+    }
+  });
+
+  await user.save();
+  return res.json({ user: user.toAuthJSON() });
+}
+
 module.exports = {
   registerNewUser,
   login,
-  getCurrentUser
+  getCurrentUser,
+  updateCurrentUser
 };

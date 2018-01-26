@@ -1,12 +1,22 @@
 const router = require("express").Router();
-const asyncWrap = require("express-async-wrap");
+const handleAsyncError = require("express-async-wrap");
 const userMiddleware = require("../../middlewares/user_middleware");
 const jwt = require("../../middlewares/jwt_middleware");
 
-router.post("/users", asyncWrap(userMiddleware.registerNewUser));
+router.post("/users", handleAsyncError(userMiddleware.registerNewUser));
 
 router.post("/users/login", userMiddleware.login);
 
-router.get("/user", jwt.required, asyncWrap(userMiddleware.getCurrentUser));
+router.get(
+  "/user",
+  jwt.required,
+  handleAsyncError(userMiddleware.getCurrentUser)
+);
+
+router.put(
+  "/user",
+  jwt.required,
+  handleAsyncError(userMiddleware.updateCurrentUser)
+);
 
 module.exports = router;
