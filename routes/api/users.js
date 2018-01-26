@@ -4,4 +4,6 @@ const userMiddleware = require("../../middlewares/user_middleware");
 
 router.post("/users", asyncWrap(userMiddleware.registerNewUser));
 
+router.post("/users/login", userMiddleware.login);
+
 module.exports = router;

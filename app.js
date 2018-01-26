@@ -46,6 +46,7 @@ if (isProduction) {
 }
 
 require("./models/User");
+require("./config/passport");
 app.use(require("./routes"));
 
 /// catch 404 and forward to error handler
@@ -57,11 +58,11 @@ app.use(function(req, res, next) {
 
 /// error handlers
 
-// development error handler
-// will print stacktrace
 if (!isProduction) {
   app.use(function(err, req, res, next) {
-    console.log(err.stack);
+    // development error handler
+    // will print stacktrace
+    //console.log(err.stack);
 
     res.status(err.status || 500);
 

@@ -9,9 +9,7 @@ function getNewUser(username, email, password) {
     email
   });
   user.setPassword(password);
-  // store the plaintext password for the test cases to simulate login
-  // this is not stored in database
-  user.password = password;
+
   return user;
 }
 
@@ -21,6 +19,9 @@ async function loadFixtures() {
     User,
     getNewUser("tom", "tom@example.com", password)
   );
+  // store the plaintext password for the test cases to simulate login
+  // this is not stored in database
+  tom.password = password;
 
   fixtures.users = { tom };
 }
