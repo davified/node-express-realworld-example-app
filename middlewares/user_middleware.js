@@ -52,11 +52,15 @@ async function updateCurrentUser(req, res) {
       errors: { "user profile": "User profile information is not given." }
     });
   }
-  ["email", "password", "username", "image", "bio"].forEach(detail => {
+  ["email", "username", "image", "bio"].forEach(detail => {
     if (newUserProfile[detail]) {
       user[detail] = newUserProfile[detail];
     }
   });
+
+  if (newUserProfile.password) {
+    user.setPassword(newUserProfile.password);
+  }
 
   await user.save();
   return res.json({ user: user.toAuthJSON() });
