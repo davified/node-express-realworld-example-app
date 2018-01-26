@@ -35,7 +35,18 @@ function login(req, res, next) {
   })(req, res, next);
 }
 
+async function getCurrentUser(req, res) {
+  if (!req.jwt) {
+    return res.status(401);
+  }
+  const userId = req.jwt.userid;
+  const user = await User.findById(userId);
+
+  return res.status(200).json({ user: user.toAuthJSON() });
+}
+
 module.exports = {
   registerNewUser,
-  login
+  login,
+  getCurrentUser
 };
