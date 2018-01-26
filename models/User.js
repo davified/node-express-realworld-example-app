@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const uniqueValidator = require("mongoose-unique-validator");
 const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
 
@@ -28,6 +29,8 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.plugin(uniqueValidator, { message: "should be unique" });
 
 UserSchema.methods.setPassword = function(password) {
   this.salt = generateSalt();

@@ -37,9 +37,9 @@ describe("New user registration", () => {
       .post("/api/users")
       .send({ user: { username, email, password } });
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body.errors.message).toBeDefined();
-    expect(response.body.errors.error.code).toBeDefined();
+    expect(response.statusCode).toBe(422);
+    const errors = response.body.errors;
+    expect(errors.username).toEqual("should be unique");
   });
 
   test("Register with duplicated email should fail", async () => {
@@ -50,8 +50,8 @@ describe("New user registration", () => {
       .post("/api/users")
       .send({ user: { username, email, password } });
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body.errors.message).toBeDefined();
-    expect(response.body.errors.error.code).toBeDefined();
+    expect(response.statusCode).toBe(422);
+    const errors = response.body.errors;
+    expect(errors.email).toEqual("should be unique");
   });
 });
