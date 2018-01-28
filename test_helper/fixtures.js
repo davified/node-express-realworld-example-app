@@ -13,17 +13,25 @@ function getNewUser(username, email, password) {
   return user;
 }
 
-async function loadFixtures() {
+async function createNewUser(userName) {
   const password = "mypassword";
-  const tom = await loadFixture(
+  const user = await loadFixture(
     User,
-    getNewUser("tom", "tom@example.com", password)
+    getNewUser(userName, `${userName}@example.com`, password)
   );
   // store the plaintext password for the test cases to simulate login
   // this is not stored in database
-  tom.password = password;
+  user.password = password;
+  return user;
+}
 
-  fixtures.users = { tom };
+async function loadFixtures() {
+  fixtures.users = {};
+  const userNames = ["tom", "jacky"];
+  for (const userName of userNames) {
+    let user = await createNewUser(userName);
+    fixtures.users[userName] = user;
+  }
 }
 
 module.exports = {

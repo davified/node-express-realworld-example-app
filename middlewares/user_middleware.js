@@ -66,9 +66,14 @@ async function updateCurrentUser(req, res) {
   return res.json({ user: user.toAuthJSON() });
 }
 
+async function resolveUsername(username) {
+  return await User.findOne({ username: username });
+}
+
 module.exports = {
   registerNewUser,
   login,
   getCurrentUser,
-  updateCurrentUser
+  updateCurrentUser,
+  resolveUsername
 };

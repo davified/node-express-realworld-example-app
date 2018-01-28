@@ -75,6 +75,16 @@ UserSchema.methods.toAuthJSON = function() {
   };
 };
 
+UserSchema.methods.getProfile = function(currentUserInSession) {
+  return {
+    username: this.username,
+    bio: this.bio,
+    image:
+      this.image || "https://static.productionready.io/images/smiley-cyrus.jpg",
+    following: false 
+  };
+};
+
 function generateSalt() {
   return crypto.randomBytes(16).toString("hex");
 }
